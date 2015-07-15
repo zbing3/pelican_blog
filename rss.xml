@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>老运维创e</title><link>/</link><description>分享技术</description><atom:link href="http://opslinux.com/rss.xml" rel="self"></atom:link><lastBuildDate>Thu, 12 Mar 2015 19:57:30 +0800</lastBuildDate><item><title>python中验证ip的有效性正则</title><link>/pytohn_ip_regex.html</link><description>&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;_chk_ipaddr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ipaddr&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;IP_PATTERN&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;^((0|[1-9]\d?|[0-1]\d{2}|2[0-4]\d|25[0-5])\.){3}(0|[1-9]\d?|[0-1]\d{2}|2[0-4]\d|25[0-5])$&amp;#39;&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;ipaddr&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
+
+    &lt;span class="n"&gt;ipcheck&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;re&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;compile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;IP_PATTERN&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;re&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;I&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;ipcheck&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;match&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ipaddr&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Thu, 12 Mar 2015 19:57:30 +0800</pubDate><guid>tag:,2015-03-12:pytohn_ip_regex.html</guid><category>python</category></item><item><title>实现微信报警</title><link>/webchat_alarm.html</link><description>&lt;p&gt;最近公司业务上涨，报警频频发生，刚买的短信接口已经用一半了，这么下去肯定不是办法。现在都是移动互联网时代了，肯定得想点新办法，看着手机我想起了微信，这货要是能实现报警，问题不就解决了么？&lt;/p&gt;
+&lt;p&gt;我抱着试一试的态度，在网上查找了一下，结果病就治好了…… 呃…… 电视广告看多了。 在网上查到了微信实现报警的方案，以我的理解分两种：&lt;/p&gt;
+&lt;p&gt;1.公众号，公众号使用模板信息可以给用户发送10w调每天的信息
+2.企业号，给员工无限制的发送信息:&lt;/p&gt;
+&lt;p&gt;企业号的功能：&lt;/p&gt;
+&lt;p&gt;企业号适用于企业与员工或上下游供应链之间的沟通。&lt;/p&gt;
+&lt;p&gt;1、企业可以主动发消息给员工，消息量不受限制。&lt;/p&gt;
+&lt;p&gt;2、企业号出现在微信会话列表首层，在通讯录中有单独的分类。&lt;/p&gt;
+&lt;p&gt;3、可以自定义菜单。&lt;/p&gt;
+&lt;p&gt;4、拥有多个子号。&lt;/p&gt;
+&lt;p&gt;5、更加关注与安全，需要双方认证。&lt;/p&gt;
+&lt;p&gt;作为一个强迫症控，那肯定得用企业号啊，这里需要老板的支持，企业号不是自己能申请的，还好我老板高瞻远瞩，已经申请好了。（嘻嘻，希望老板能看到）&lt;/p&gt;
+&lt;div class="section" id="id2"&gt;
+&lt;h2&gt;对企业号进行配置：&lt;/h2&gt;
+&lt;p&gt;扫描二维码进行登录：&lt;a class="reference external" href="https://qy.weixin.qq.com/"&gt;https://qy.weixin.qq.com/&lt;/a&gt;&lt;/p&gt;
+&lt;img alt="登陆" class="align-center" src="/upload/4992AAEE-C78E-4E54-86B8-7E22D477FA85.png" style="width: 200px; height: 200px;" /&gt;
+&lt;/div&gt;
+&lt;div class="section" id="id3"&gt;
+&lt;h2&gt;配置企业号&lt;/h2&gt;
+&lt;p&gt;登陆以后新建应用：&lt;/p&gt;
+&lt;img alt="创建应用" class="align-center" src="/upload/2015040801createapp.png" style="width: 300px; height: 300px;" /&gt;
+&lt;p&gt;输入应用名称为监控报警就新建了一个叫做监控报警的应用，新建完成后，进入【应用中心】查看应用id， 这里后面要用。&lt;/p&gt;
+&lt;p&gt;设置管理员：&lt;/p&gt;
+&lt;p&gt;指定应用的管理员。点击设置-&amp;gt; 权限管理 -&amp;gt; 管理 -&amp;gt; 新建管理组 --&amp;gt; 添加管理员和权限。然后就会获得corpid 和 sceret。这里后面也要用。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="id4"&gt;
+&lt;h2&gt;开发&lt;/h2&gt;
+&lt;p&gt;1、阅读开发文档。文档位置：&lt;a class="reference external" href="http://qydev.weixin.qq.com/wiki/index.php?title=%E9%A6%96%E9%A1%B5"&gt;微信开发文档&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我只读了建立连接、管理通讯录、发送消息。好了，发个报警够了，很简单。&lt;/p&gt;
+&lt;p&gt;2、建立连接获取access_token。&lt;/p&gt;
+&lt;p&gt;这个token是一个有有效时间的密钥用于后续操作认证。&lt;/p&gt;
+&lt;p&gt;Https请求方式: GET&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=id&amp;amp;corpsecret=secrect"&gt;https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=id&amp;amp;corpsecret=secrect&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;正常情况下就会反馈一个json并得到access_token&lt;/p&gt;
+&lt;p&gt;根据文档获取玩access_token后就可以发送消息了。&lt;/p&gt;
+&lt;p&gt;我写的脚本代码如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/usr/bin/env python&lt;/span&gt;
+&lt;span class="c"&gt;# coding:utf-8&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;sys&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;urllib2&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;time&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;json&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;requests&lt;/span&gt;
+
+&lt;span class="nb"&gt;reload&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;setdefaultencoding&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;utf-8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;title&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;argv&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;   &lt;span class="c"&gt;# 位置参数获取title 适用于zabbix&lt;/span&gt;
+&lt;span class="n"&gt;content&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;argv&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="c"&gt;# 位置参数获取content 适用于zabbix&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Token&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="c"&gt;# 获取token&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;corpid&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;corpsecret&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;baseurl&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={0}&amp;amp;corpsecret={1}&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+            &lt;span class="n"&gt;corpid&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;corpsecret&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expire_time&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;maxint&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get_token&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expire_time&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+            &lt;span class="n"&gt;request&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;urllib2&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Request&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;baseurl&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="n"&gt;response&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;urllib2&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;urlopen&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;request&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="n"&gt;ret&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;response&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;strip&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="n"&gt;ret&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;json&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;loads&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ret&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;errcode&amp;#39;&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;ret&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;keys&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+                &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;ret&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;errmsg&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;stderr&lt;/span&gt;
+                &lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;exit&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expire_time&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;ret&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;expires_in&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;access_token&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;ret&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;access_token&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;access_token&lt;/span&gt;
+
+
+&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;send_msg&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="c"&gt;# 发送消息&lt;/span&gt;
+    &lt;span class="n"&gt;corpid&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt;  &lt;span class="c"&gt;# 填写自己应用的&lt;/span&gt;
+    &lt;span class="n"&gt;corpsecret&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;quot;&lt;/span&gt; &lt;span class="c"&gt;# 填写自己应用的&lt;/span&gt;
+    &lt;span class="n"&gt;qs_token&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Token&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;corpid&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;corpid&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;corpsecret&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;corpsecret&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get_token&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+    &lt;span class="n"&gt;url&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token={0}&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+        &lt;span class="n"&gt;qs_token&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;payload&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;quot;touser&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;user1|user2&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;quot;msgtype&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;quot;agentid&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;3&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+                   &lt;span class="s"&gt;&amp;quot;content&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;标题:{0}&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt; 内容:{1}&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;format&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+        &lt;span class="p"&gt;},&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;quot;safe&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;0&amp;quot;&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="n"&gt;ret&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;requests&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;post&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;data&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;json&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dumps&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;payload&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ensure_ascii&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;ret&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;json&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="c"&gt;# print title, content&lt;/span&gt;
+    &lt;span class="n"&gt;send_msg&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;content&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="id5"&gt;
+&lt;h2&gt;参考文章：&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.anbooks.cn/topic/4145905736700.html"&gt;微信公众平台企业号用于监控报警探究（python版本）&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Sun, 15 Feb 2015 10:39:45 +0800</pubDate><guid>tag:,2015-02-15:webchat_alarm.html</guid><category>python</category></item><item><title>python通过telnet连接华为设备</title><link>/python_telnet_huawei.html</link><description>&lt;p&gt;最近在研究华为防火墙，要搞个web版的程序来控制防火墙，那底层就需要用telnet或者snmp来控制设置，今天先共享下telnet的代码&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;#coding=utf-8&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;telnetlib&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;re&lt;/span&gt;
+&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;time&lt;/span&gt;
+
+&lt;span class="n"&gt;HOST&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;192.168.1.231&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;user&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;admin&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;password&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;admin&amp;#39;&lt;/span&gt;
+
+&lt;span class="n"&gt;tn&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;telnetlib&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Telnet&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;HOST&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="c"&gt;# tn.set_debuglevel(2) #开启调试模式&lt;/span&gt;
+
+&lt;span class="n"&gt;tn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expect&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;re&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;compile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Username:&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;),])&lt;/span&gt; &lt;span class="c"&gt;#用正则匹配Username&lt;/span&gt;
+&lt;span class="n"&gt;tn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;user&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;  &lt;span class="c"&gt;#匹配成功，输入user&lt;/span&gt;
+&lt;span class="n"&gt;tn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expect&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="n"&gt;re&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;compile&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;b&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Password:&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;),])&lt;/span&gt; &lt;span class="c"&gt;#同上&lt;/span&gt;
+&lt;span class="n"&gt;tn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;password&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c"&gt;#同上&lt;/span&gt;
+&lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;tn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_until&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&amp;lt;HWJC.HL-DDoS.SDA&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c"&gt;#如果读到&amp;lt;HWJC.HL-DDoS.SDA&amp;gt;提示符，执行下面命令&lt;/span&gt;
+&lt;span class="n"&gt;tn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;display clock&lt;/span&gt;&lt;span class="se"&gt;\n&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;  &lt;span class="c"&gt;#输入命令&lt;/span&gt;
+&lt;span class="n"&gt;tn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_until&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;display clock&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c"&gt;#如果读到&amp;quot;display clock&amp;quot;，执行下面命令，这里的操作是在后面获取返回值的时候排除&amp;quot;display clock&amp;quot;这一行数据&lt;/span&gt;
+&lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sleep&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c"&gt;#延时以确保下调命令能读到数据&lt;/span&gt;
+&lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;tn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;read_very_eager&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c"&gt;#打印执行&amp;quot;display clock&amp;quot;的返回值&lt;/span&gt;
+&lt;span class="c"&gt;# tn.write(&amp;quot;quit\n&amp;quot;) #退出&lt;/span&gt;
+&lt;span class="c"&gt;# print tn.read_all() #获取全部返回值&lt;/span&gt;
+&lt;span class="n"&gt;tn&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;close&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="c"&gt;#关闭连接&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Thu, 29 Jan 2015 17:40:07 +0800</pubDate><guid>tag:,2015-01-29:python_telnet_huawei.html</guid><category>python</category></item><item><title>python开发实践(四)</title><link>/python_viode_4.html</link><description>&lt;p&gt;在大家看到这门课程的时候，这个视频已经让我传到51cto的学院上了，之前一直用七牛云存储做视频存放，结果超过免费标准，收费了然后给我账号封了，我很无奈所以想找个新的放视频的地方，最好是优酷，结果优酷审核总是很慢，所以我就选择了51cto。但是想观看51cto的这个课程需要花费5金币来购买，5金币也就是5元人民币，这也是我经过深思熟虑的事，一是这样会让我录制视频更有动力，二是大家看起来也会更珍惜。所以还是希望大家多少支持吧。毕竟大家看到我这幻灯片做的都对得起这个价格，哈哈哈……&lt;/p&gt;
+&lt;p&gt;共享你的代码（二）课程知识点：&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;新需求&lt;/li&gt;
+&lt;li&gt;改变API后，兼容老用户&lt;/li&gt;
+&lt;li&gt;增加参数，满足新老用户&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;视频地址：请点击 &lt;a class="reference external" href="http://edu.51cto.com/lesson/id-49838.html"&gt;共享你的代码（二）&lt;/a&gt;&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Tue, 27 Jan 2015 17:59:13 +0800</pubDate><guid>tag:,2015-01-27:python_viode_4.html</guid><category>python</category></item><item><title>Django内存溢出</title><link>/django_memory_out.html</link><description>&lt;p&gt;前两天工作需求，把python脚本从crontab的方式改成守护进程(daemon)，上线后发现，内存飙升，cpu飙高，程序直接死掉，让我伤心欲绝，郁郁寡欢，终日不得眠啊。开始以为是内存溢出用gc调试好久也看不出问题。由于项目使用了Django-ORM，所以开始怀疑是不是因为Django引发的性能问题。&lt;/p&gt;
+&lt;p&gt;搜索了一下关于django内存泄露的文章，这片文章 —— &lt;a class="reference external" href="http://www.igigo.net/post/archives/66"&gt;Django&amp;quot;内存泄漏&amp;quot;的问题&lt;/a&gt;  给我了启示:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;文中第一条就提到:Make sure that you set DEBUG to False in settings.py，在DEBUG模式下，所有的SQL查询都会被保存在内存中.我顿时想起，由于我整个项目还在调试阶段，这个DEBUG变量是设置为True的&lt;/p&gt;
+&lt;p&gt;DEBUG设置为False后，内存泄漏的问题就不复存在了&lt;/p&gt;
+&lt;p&gt;可我整个项目还需要调试，不能就这么简单的关闭DEBUG模式，怎么办? 我一开始想在后台模块import settings后再重新设置DEBUG变量&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;下面分析一下脚本程序，import了Django的models,并且对数据库的数据做了轮询操作，所以执行大量的sql去读数据库的全部数据，由于线上DEBUG改成了True，所有的SQL查询保存在了内存中，这样导致内存飙高，好吧不得不说为了把脚本弄成守护进程方式，还用了个while True的死循环，虽然改成了while 1，但是心里还是怪怪的。&lt;/p&gt;
+&lt;p&gt;找到问题的原因，我就把DEBUG改成False重启一下,果然内存不再飙高，就此搞定。在此记录一下，解决线上问题的一个小思路。&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Sun, 14 Dec 2014 21:43:36 +0800</pubDate><guid>tag:,2014-12-14:django_memory_out.html</guid><category>python</category></item><item><title>Python对象类型转换json的方法</title><link>/python_obj_for_json.html</link><description>&lt;p&gt;有时候，在Django的model中,直接查询出来的orm对象，想直接转成json会报错：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="ne"&gt;TypeError&lt;/span&gt; &lt;span class="ow"&gt;is&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;JSON&lt;/span&gt; &lt;span class="n"&gt;serializable&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;convert_to_builtin_type&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;obj&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="c"&gt;# print &amp;#39;default(&amp;#39;, repr(obj), &amp;#39;)&amp;#39;&lt;/span&gt;
+    &lt;span class="c"&gt;# Convert objects to a dictionary of btheir representation&lt;/span&gt;
+    &lt;span class="n"&gt;d&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;__class__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;obj&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;__class__&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;__name__&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+          &lt;span class="s"&gt;&amp;#39;__module__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;obj&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;__module__&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;update&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;obj&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;__dict__&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;然后在函数中调用：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;ip&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Ip&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;objects&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;filter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ip&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;ip&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;context&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;ip&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ip&lt;/span&gt;&lt;span class="p"&gt;)}&lt;/span&gt;
+&lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;HttpResponse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;json&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dumps&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ensure_ascii&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;indent&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;default&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;convert_to_builtin_type&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;如上先filter出ip=ip的条目保存在ip变量中，然后格式化下保存在context变量中。调用时放在default中。&lt;/p&gt;
+&lt;p&gt;如果喜欢pythonic，可以用下面lambda方式搞定：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;HttpResponse&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;json&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;dumps&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ensure_ascii&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;False&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;indent&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;default&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;lambda&lt;/span&gt; &lt;span class="n"&gt;o&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;o&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;__dict__&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Thu, 27 Nov 2014 14:44:10 +0800</pubDate><guid>tag:,2014-11-27:python_obj_for_json.html</guid><category>python</category></item><item><title>python跳出多层循环</title><link>/python_multi_for_break.html</link><description>&lt;p&gt;今天同事问我一个python面试题，关于python跳出多层循环，原来还真没用过，网上一查还真有点意思，下面记录一下：&lt;/p&gt;
+&lt;p&gt;Python 本身没有“break n” 和“goto” 的语法，这也造成了Python 难以跳出多层（特定层数）循环。下面是几个跳出多层（特定层数）循环的tip。&lt;/p&gt;
+&lt;div class="section" id="id1"&gt;
+&lt;h2&gt;1、自定义异常&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;getoutofloop&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="ne"&gt;Exception&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt; &lt;span class="k"&gt;pass&lt;/span&gt;
+
+&lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+                &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                    &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="n"&gt;getoutofloop&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;----&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;----&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt;
+&lt;span class="k"&gt;except&lt;/span&gt; &lt;span class="n"&gt;getoutofloop&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;pass&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="return"&gt;
+&lt;h2&gt;2、封装为函数return&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;test&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+                &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                    &lt;span class="k"&gt;return&lt;/span&gt;
+                &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                    &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;----&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;----&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt;
+&lt;span class="n"&gt;test&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="for-else"&gt;
+&lt;h2&gt;3、for ... else ... 用法&lt;/h2&gt;
+&lt;p&gt;上面的两种都是只能跳出多层而不能跳出特定层数的循环，接下来的这个正是为了跳出特定层数的循环。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="nb"&gt;range&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+            &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                &lt;span class="k"&gt;break&lt;/span&gt;
+            &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;----&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;j&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;----&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;k&lt;/span&gt;
+        &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="k"&gt;continue&lt;/span&gt;
+        &lt;span class="k"&gt;break&lt;/span&gt;
+    &lt;span class="k"&gt;else&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="k"&gt;continue&lt;/span&gt;
+    &lt;span class="k"&gt;break&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;else在 while和for 正常循环完成之后执行，和直接写在 while和for 之后没有区别，但是如果用break结束循环之后else就不会执行了。这也是个很新奇的做法。&lt;/p&gt;
+&lt;p&gt;才知道原来可以作为跳出多层循环用。不过要是有多次跳出不同层的循环的需求，也没辙了。&lt;/p&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Wed, 26 Nov 2014 16:34:33 +0800</pubDate><guid>tag:,2014-11-26:python_multi_for_break.html</guid><category>python</category></item><item><title>Python is的使用</title><link>/python_is.html</link><description>&lt;p&gt;python is是种很特殊的语法，你在其它的语言应该不会见到这样的用法.
+python is主要是判断2个变量是否引用的是同一个对象，如果是的话，则返回True，否则返回False&lt;/p&gt;
+&lt;p&gt;比如:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;abc&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;b&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;abc&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;a is b 返回True,因为变量a和b都存储了字符串'abc'对象的地址。&lt;/p&gt;
+&lt;p&gt;如果是:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;abc&amp;#39;&lt;/span&gt;
+&lt;span class="n"&gt;c&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;abcd&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;print a is c 返回False,因为变量a和c存储了字符串对象地址不一致。&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Tue, 25 Nov 2014 19:00:27 +0800</pubDate><guid>tag:,2014-11-25:python_is.html</guid><category>python</category></item><item><title>Django使用两个以上mysql数据库</title><link>/django_multiple_mysql.html</link><description>&lt;div class="contents topic" id="contents"&gt;
+&lt;p class="topic-title first"&gt;Contents&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#settings-py" id="id1"&gt;settings.py&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#router" id="id2"&gt;router&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#model" id="id3"&gt;model中的使用&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;p&gt;看了Django的官方文档，关于model这有介绍Multiple databases，但是没有介绍超过两个数据库的连接情况，这里我用mysql举例子，连接3个mysql数据库。估计这么用的不多哈哈哈，我们的需求比较复杂两个mysql上的都是公用数据，然后默认的数据库是我项目使用的数据库，保存着自己项目的账户系统和使用的一些信息。&lt;/p&gt;
+&lt;div class="section" id="settings-py"&gt;
+&lt;h2&gt;&lt;a class="toc-backref" href="#id1"&gt;settings.py&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;下面是settings文件的配置，添加三个数据库，default为本项目自己的数据库，剩下两个为外部数据库&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;DATABASES&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="s"&gt;&amp;#39;default&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;ENGINE&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;django.db.backends.mysql&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;NAME&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;my_db&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;USER&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;root&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;PASSWORD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;123456&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;HOST&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;127.0.0.1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;PORT&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;3306&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt;
+    &lt;span class="s"&gt;&amp;#39;web_db&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;ENGINE&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;django.db.backends.mysql&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;NAME&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;web_db&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;USER&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;root&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;PASSWORD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;123456&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;HOST&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;127.0.0.1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;PORT&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;3306&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt;
+    &lt;span class="s"&gt;&amp;#39;admin_db&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;ENGINE&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;django.db.backends.mysql&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;NAME&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;admin_db&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;USER&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;root&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;PASSWORD&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;123456&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;HOST&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;127.0.0.1&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+        &lt;span class="s"&gt;&amp;#39;PORT&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;3306&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="p"&gt;},&lt;/span&gt;
+
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="router"&gt;
+&lt;h2&gt;&lt;a class="toc-backref" href="#id2"&gt;router&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;根据官方文档提示需要自己写个router文件，我的修改如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;AuthRouter&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;object&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot; 控制 adminapp 应用中模型的&lt;/span&gt;
+&lt;span class="sd"&gt;    所有数据库操作的路由 &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;db_for_read&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="n"&gt;hints&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;adminapp&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;admin_db&amp;#39;&lt;/span&gt;
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;webapp&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;web_db&amp;#39;&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;db_for_write&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="n"&gt;hints&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;adminapp&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;admin_db&amp;#39;&lt;/span&gt;
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;qingsong&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;web_db&amp;#39;&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;allow_relation&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;obj1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;obj2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="o"&gt;**&lt;/span&gt;&lt;span class="n"&gt;hints&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;obj1&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;adminapp&amp;#39;&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;obj2&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;adminapp&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;obj1&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;qingsong&amp;#39;&lt;/span&gt; &lt;span class="ow"&gt;or&lt;/span&gt; &lt;span class="n"&gt;obj2&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;qingsong&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;True&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;allow_syncdb&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;db&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="c"&gt;#django1.7&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;db:&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s"&gt;,model:&lt;/span&gt;&lt;span class="si"&gt;%s&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;db&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;print&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;db&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;admin_db&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;adminapp&amp;#39;&lt;/span&gt;
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;adminapp&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;db&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;qingsong_db&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;qingsong&amp;#39;&lt;/span&gt;
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;qingsong&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;allow_migrate&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;db&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="c"&gt;#django1.7&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;db&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;admin_db&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;adminapp&amp;#39;&lt;/span&gt;
+        &lt;span class="k"&gt;elif&lt;/span&gt; &lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_meta&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;adminapp&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;False&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;然后根据官方文档在settings中加入：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;DATABASE_ROUTERS&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;path.to.AuthRouter&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;path.to.PrimaryReplicaRouter&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="model"&gt;
+&lt;h2&gt;&lt;a class="toc-backref" href="#id3"&gt;model中的使用&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;关于app_label在1.6和1.7中使用稍有不同，官方文档有详细记载，这里我举例Django1.6的方式：&lt;/p&gt;
+&lt;p&gt;在model中加入app_label标签，这个model属于哪个数据库，写上数据库的名字（settings.py文件中的名字），例如：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Test&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Model&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;models&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;CharField&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;max_length&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;unique&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Meta&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;db_table&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;test&amp;#39;&lt;/span&gt;
+        &lt;span class="n"&gt;app_label&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;adminapp&amp;#39;&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;__unicode__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Thu, 20 Nov 2014 17:11:04 +0800</pubDate><guid>tag:,2014-11-20:django_multiple_mysql.html</guid><category>Django</category><category>mysql</category></item><item><title>谈工作谈技术谈视频</title><link>/talk_work_technology_video.html</link><description>&lt;p&gt;今天，谈谈工作，谈谈技术，谈谈理想，谈谈人生&lt;/p&gt;
+&lt;div class="section" id="id2"&gt;
+&lt;h2&gt;工作&lt;/h2&gt;
+&lt;p&gt;最近，又换了份工作，其实本来是不想走的，但是由于自己太浮躁，换了部门，导致自己没活干，天天混日子也不是我的性格，所以最终确定还是找个靠谱的python业务开发。离职当天，我就高烧39°，战胜病魔后，我痛定思痛，总结了很多，在这里跟大家分享一下。&lt;/p&gt;
+&lt;p&gt;首先，自己好胜心太强，以至于太急躁，没活干的时候总是胡思乱想，导致了自己换部门，以后在没活干的时候正好是自己积累和学习的过程是个很难得的机会，要好好把握。所以不管干什么要谋定而后动。&lt;/p&gt;
+&lt;p&gt;其次，要找到自己工作的目标，有了目标就不会胡乱去想。&lt;/p&gt;
+&lt;p&gt;最后，把目标转化成自己要学的技术，比如我要学的技术就是linux和c，相关的书籍《unix环境编程》《unix网络编程》《unix编程艺术》《c语言程序设计》&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="python"&gt;
+&lt;h2&gt;关于python开发实践视频&lt;/h2&gt;
+&lt;p&gt;1 初识Python:人人都爱列表&lt;/p&gt;
+&lt;p&gt;2 共享你的代码：函数模块&lt;/p&gt;
+&lt;p&gt;3 文件与异常：处理错误&lt;/p&gt;
+&lt;p&gt;4 持久存储：数据保存到文件&lt;/p&gt;
+&lt;p&gt;5 推导数据：处理数据！&lt;/p&gt;
+&lt;p&gt;6 定制数据对象：打包代码与数据&lt;/p&gt;
+&lt;p&gt;6课，一共12课时，我答应大家的一定会去录制，最近灿哥正好组织培训分享，我也会加入进去。2个多月没更新视频，一是自己这段时间总是在考虑工作的事，二是在想用什么更好的方式传播分享知识，其实文字是最好的方式，但是文字有时候又不太好表达，自己的文字功底还没练到家。所以我也会尝试的去做一做，基础课程录制完成，稍微的写下gitbook。当做日后实战的教材也好。基础的课程我就不在写太多文字的东西了，因为我是以head first python 为基础录制的，希望大家可以支持他们一下。&lt;/p&gt;
+&lt;p&gt;这几年一直在琢磨培训学习的事，也是业余培训讲师，随着年岁的增长如果自己发现了更好的学习方法和方式，也会再跟大家分享，弄不好会自己写一本编程的基础书籍。&lt;/p&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Tue, 02 Sep 2014 20:10:14 +0800</pubDate><guid>tag:,2014-09-02:talk_work_technology_video.html</guid><category>随笔</category></item><item><title>sublime 支持开发 coffeescript compass sass</title><link>/sublime_coffeescript_compass_sass.html</link><description>&lt;p&gt;没啥难的看我的节奏：&lt;/p&gt;
+&lt;p&gt;使用Shift + command + P调出命令面板：&lt;/p&gt;
+&lt;p&gt;输入 install 调出 Package Control: Install Package 选项，按下回车&lt;/p&gt;
+&lt;p&gt;在列表中分别找到 CoffeeScript，compass，sass和sass build按下回车进行安装&lt;/p&gt;
+&lt;p&gt;重启Sublime Text 2使之生效&lt;/p&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Tue, 26 Aug 2014 20:11:46 +0800</pubDate><guid>tag:,2014-08-26:sublime_coffeescript_compass_sass.html</guid><category>sublime</category></item><item><title>python开发实践(三)</title><link>/python_viode_3.html</link><description>&lt;p&gt;共享你的代码&lt;/p&gt;
+&lt;p&gt;共享你的代码课程知识点：&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;编辑器&lt;/li&gt;
+&lt;li&gt;注释&lt;/li&gt;
+&lt;li&gt;命名空间&lt;/li&gt;
+&lt;li&gt;PyPi&lt;/li&gt;
+&lt;li&gt;上传&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;上传PyPi没有成功，因为nester这个模块名已经有了，大家可以更改下名字，再上传测试，这个作为作业。&lt;/p&gt;
+&lt;p&gt;测试完成 你就可以使用如下命令安装：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;pip install nester  &lt;span class="c"&gt;#nester为你自己的模块名&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;关于编辑器 可以看  &lt;a class="reference external" href="http://opslinux.com/sublime_python.html"&gt;配置sublime打造python编辑器&lt;/a&gt;   先可以有了自己的需求感觉不方便可参考配置。&lt;/p&gt;
+&lt;video width="800" height="600" controls="controls"&gt;&lt;source src="movie.ogg" type="video/ogg" /&gt;&lt;source src="http://opslinux.qiniudn.com/3.%E5%85%B1%E4%BA%AB%E4%BD%A0%E7%9A%84%E4%BB%A3%E7%A0%81(%E4%B8%80).mp4" type="video/mp4" /&gt;Your browser does not support the video tag.&lt;/video&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Mon, 16 Jun 2014 09:45:03 +0800</pubDate><guid>tag:,2014-06-16:python_viode_3.html</guid><category>python</category></item><item><title>python开发实践(二)</title><link>/python_viode_2.html</link><description>&lt;p&gt;人人都爱列表，把之前的坑填完，讲了函数和递归，&lt;/p&gt;
+&lt;p&gt;人人都爱列表课程知识点：&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;if&lt;/li&gt;
+&lt;li&gt;for&lt;/li&gt;
+&lt;li&gt;函数&lt;/li&gt;
+&lt;li&gt;递归&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;课后可看培强同学的笔记，写的非常棒，整理的比我好：&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://peiqiang.net/2014/05/29/learn-python-from-binge.html"&gt;培强的笔记&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://opslinux.com/sublime_python.html"&gt;配置sublime打造python编辑器&lt;/a&gt;&lt;/p&gt;
+&lt;video width="800" height="600" controls="controls"&gt;&lt;source src="movie.ogg" type="video/ogg" /&gt;&lt;source src="http://opslinux.qiniudn.com/2.%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E5%88%97%E8%A1%A8(%E4%BA%8C).mp4" type="video/mp4" /&gt;Your browser does not support the video tag.&lt;/video&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Wed, 28 May 2014 21:12:18 +0800</pubDate><guid>tag:,2014-05-28:python_viode_2.html</guid><category>python</category></item><item><title>Django错误日志在命令行显示</title><link>/Django_Console_logging_to_STDOUT-.html</link><description>&lt;p&gt;最近项目传到服务器上测试，由于没开启log，有些错误没法判断，顾设置之，有此博文。&lt;/p&gt;
+&lt;p&gt;修改settings文件，添加如下代码：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nv"&gt;LOGGING&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;version&amp;#39;&lt;/span&gt;: 1,
+    &lt;span class="s1"&gt;&amp;#39;disable_existing_loggers&amp;#39;&lt;/span&gt;: False,
+    &lt;span class="s1"&gt;&amp;#39;formatters&amp;#39;&lt;/span&gt;: &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="s1"&gt;&amp;#39;verbose&amp;#39;&lt;/span&gt;: &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="s1"&gt;&amp;#39;format&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s&amp;#39;&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;,
+        &lt;span class="s1"&gt;&amp;#39;simple&amp;#39;&lt;/span&gt;: &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="s1"&gt;&amp;#39;format&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;%(levelname)s %(message)s&amp;#39;&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;,
+    &lt;span class="o"&gt;}&lt;/span&gt;,
+    &lt;span class="s1"&gt;&amp;#39;handlers&amp;#39;&lt;/span&gt;: &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="s1"&gt;&amp;#39;null&amp;#39;&lt;/span&gt;: &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="s1"&gt;&amp;#39;level&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;DEBUG&amp;#39;&lt;/span&gt;,
+            &lt;span class="s1"&gt;&amp;#39;class&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;logging.NullHandler&amp;#39;&lt;/span&gt;,
+        &lt;span class="o"&gt;}&lt;/span&gt;,
+        &lt;span class="s1"&gt;&amp;#39;console&amp;#39;&lt;/span&gt;:&lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="s1"&gt;&amp;#39;level&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;DEBUG&amp;#39;&lt;/span&gt;,
+            &lt;span class="s1"&gt;&amp;#39;class&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;logging.StreamHandler&amp;#39;&lt;/span&gt;,
+            &lt;span class="s1"&gt;&amp;#39;formatter&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;verbose&amp;#39;&lt;/span&gt;,
+        &lt;span class="o"&gt;}&lt;/span&gt;,
+        &lt;span class="s1"&gt;&amp;#39;mail_admins&amp;#39;&lt;/span&gt;: &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="s1"&gt;&amp;#39;level&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;ERROR&amp;#39;&lt;/span&gt;,
+            &lt;span class="s1"&gt;&amp;#39;class&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;django.utils.log.AdminEmailHandler&amp;#39;&lt;/span&gt;,
+            &lt;span class="c"&gt;# &amp;#39;filters&amp;#39;: [&amp;#39;special&amp;#39;]&lt;/span&gt;
+        &lt;span class="o"&gt;}&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;,
+    &lt;span class="s1"&gt;&amp;#39;loggers&amp;#39;&lt;/span&gt;: &lt;span class="o"&gt;{&lt;/span&gt;
+        &lt;span class="s1"&gt;&amp;#39;django&amp;#39;&lt;/span&gt;: &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="s1"&gt;&amp;#39;handlers&amp;#39;&lt;/span&gt;: &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;console&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;,
+            &lt;span class="s1"&gt;&amp;#39;propagate&amp;#39;&lt;/span&gt;: True,
+            &lt;span class="s1"&gt;&amp;#39;level&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;ERROR&amp;#39;&lt;/span&gt;,
+        &lt;span class="o"&gt;}&lt;/span&gt;,
+        &lt;span class="s1"&gt;&amp;#39;django.request&amp;#39;&lt;/span&gt;: &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="s1"&gt;&amp;#39;handlers&amp;#39;&lt;/span&gt;: &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;mail_admins&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;,
+            &lt;span class="s1"&gt;&amp;#39;level&amp;#39;&lt;/span&gt;: &lt;span class="s1"&gt;&amp;#39;ERROR&amp;#39;&lt;/span&gt;,
+            &lt;span class="s1"&gt;&amp;#39;propagate&amp;#39;&lt;/span&gt;: True,
+        &lt;span class="o"&gt;}&lt;/span&gt;,
+    &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Tue, 27 May 2014 21:04:59 +0800</pubDate><guid>tag:,2014-05-27:Django_Console_logging_to_STDOUT-.html</guid><category>Django</category><category>python</category></item><item><title>配置sublime打造python编辑器</title><link>/sublime_python.html</link><description>&lt;div class="contents topic" id="contents"&gt;
+&lt;p class="topic-title first"&gt;Contents&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#id1" id="id3"&gt;插件&lt;/a&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#package-control" id="id4"&gt;Package Control&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#sublimecodeintel" id="id5"&gt;SublimeCodeIntel插件&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#sublimelinter" id="id6"&gt;SublimeLinter&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#python-pep8-autoformat" id="id7"&gt;Python PEP8 Autoformat&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#gitgutter" id="id8"&gt;GitGutter&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#sidebarenhancements" id="id9"&gt;SideBarEnhancements&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a class="reference internal" href="#id2" id="id10"&gt;快捷键&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;p&gt;昨晚长夜漫漫，无心睡眠，运维开发群里交谈不断，突然一位常用vim的同学想开速的学习下sublime的配置，来开发python，由于本人一直使用sublime开发python web项目，索性把自己的配置过程写下来，方便大家交流。&lt;/p&gt;
+&lt;hr class="docutils" /&gt;
+&lt;p&gt;首先，安装上sublime这个就不多说了，本人使用的是宿便sublime Text2 虽然出3了，但是有些插件还没有支持索性不用3。&lt;/p&gt;
+&lt;p&gt;进入下面的配置文件：&lt;/p&gt;
+&lt;p&gt;Preferences ——》Settings - Default&lt;/p&gt;
+&lt;p&gt;找到对应的关键字，修改成下面的值，切忌：不是复制下面粘贴进去。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="o"&gt;{&lt;/span&gt;
+     &lt;span class="s2"&gt;&amp;quot;auto_indent&amp;quot;&lt;/span&gt;: &lt;span class="nb"&gt;true&lt;/span&gt;,
+     &lt;span class="s2"&gt;&amp;quot;drag_text&amp;quot;&lt;/span&gt;: &lt;span class="nb"&gt;false&lt;/span&gt;,
+     &lt;span class="s2"&gt;&amp;quot;font_face&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;,
+     &lt;span class="s2"&gt;&amp;quot;font_size&amp;quot;&lt;/span&gt;: 17.5,
+     &lt;span class="s2"&gt;&amp;quot;ignored_packages&amp;quot;&lt;/span&gt;:
+     &lt;span class="o"&gt;[&lt;/span&gt;
+          &lt;span class="s2"&gt;&amp;quot;Vintage&amp;quot;&lt;/span&gt;
+     &lt;span class="o"&gt;]&lt;/span&gt;,
+     &lt;span class="s2"&gt;&amp;quot;tab_size&amp;quot;&lt;/span&gt;: 4,
+     &lt;span class="s2"&gt;&amp;quot;translate_tabs_to_spaces&amp;quot;&lt;/span&gt;: &lt;span class="nb"&gt;true&lt;/span&gt;,
+     &lt;span class="s2"&gt;&amp;quot;trim_automatic_white_space&amp;quot;&lt;/span&gt;: &lt;span class="nb"&gt;true&lt;/span&gt;,
+     &lt;span class="s2"&gt;&amp;quot;word_wrap&amp;quot;&lt;/span&gt;: &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="section" id="id1"&gt;
+&lt;h2&gt;&lt;a class="toc-backref" href="#id3"&gt;插件&lt;/a&gt;&lt;/h2&gt;
+&lt;div class="section" id="package-control"&gt;
+&lt;h3&gt;&lt;a class="toc-backref" href="#id4"&gt;Package Control&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;包管理器是必备的，新下载的Sublime Text第一个装的肯定是这个，有了它，装其他的包就很方便了。&lt;/p&gt;
+&lt;p&gt;适用于 Sublime Text 3：&lt;/p&gt;
+&lt;p&gt;1、通过快捷键 ctrl+` 或者 View &amp;gt; Show Console 菜单打开控制台&lt;/p&gt;
+&lt;p&gt;2、粘贴对应版本的代码后回车安装&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;import  urllib.request,os&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="nv"&gt;pf&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Package Control.sublime-package&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="nv"&gt;ipp&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;sublime.installed_packages_path&lt;span class="o"&gt;()&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;urllib.request.install_opener&lt;span class="o"&gt;(&lt;/span&gt;urllib.request.build_opener&lt;span class="o"&gt;(&lt;/span&gt;urllib.request.ProxyHandler&lt;span class="o"&gt;()))&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;open&lt;span class="o"&gt;(&lt;/span&gt;os.path.join&lt;span class="o"&gt;(&lt;/span&gt;ipp,pf&lt;span class="o"&gt;)&lt;/span&gt;,&lt;span class="s1"&gt;&amp;#39;wb&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;.write&lt;span class="o"&gt;(&lt;/span&gt;urllib.request.urlopen&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;http://sublime.wbond.net/&amp;#39;&lt;/span&gt;+pf.replace&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39; &amp;#39;&lt;/span&gt;,&lt;span class="s1"&gt;&amp;#39;%20&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;))&lt;/span&gt;.read&lt;span class="o"&gt;())&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;适用于 Sublime Text 2：
+安装方式有两种，第一种是在线下载安装：在 Sublime Text 2 中按下 &amp;quot;ctrl+`&amp;quot;（就是大键盘数字1左边的那个键），拷贝以下命令到窗口下部的终端中，&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;import urllib2,os&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nv"&gt;pf&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Package Control.sublime-package&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nv"&gt;ipp&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;sublime.installed_packages_path&lt;span class="o"&gt;()&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; os.makedirs&lt;span class="o"&gt;(&lt;/span&gt;ipp&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="k"&gt;if&lt;/span&gt; not os.path.exists&lt;span class="o"&gt;(&lt;/span&gt;ipp&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="k"&gt;else&lt;/span&gt; None&lt;span class="p"&gt;;&lt;/span&gt; urllib2.install_opener&lt;span class="o"&gt;(&lt;/span&gt;urllib2.build_opener&lt;span class="o"&gt;(&lt;/span&gt;urllib2.ProxyHandler&lt;span class="o"&gt;()))&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; open&lt;span class="o"&gt;(&lt;/span&gt;os.path.join&lt;span class="o"&gt;(&lt;/span&gt;ipp,pf&lt;span class="o"&gt;)&lt;/span&gt;,&lt;span class="s1"&gt;&amp;#39;wb&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;.write&lt;span class="o"&gt;(&lt;/span&gt;urllib2.urlopen&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;http://sublime.wbond.net/&amp;#39;&lt;/span&gt;+pf.replace&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39; &amp;#39;&lt;/span&gt;,&lt;span class="s1"&gt;&amp;#39;%20&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;))&lt;/span&gt;.read&lt;span class="o"&gt;())&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; print &lt;span class="s1"&gt;&amp;#39;Please restart Sublime Text to finish installation&amp;#39;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;然后回车确认，安装完毕之后重启sublime，如果发现在Perferences中看到package control这一项，则安装成功。&lt;/p&gt;
+&lt;p&gt;然后就可以通过&amp;quot;command+Shift+P&amp;quot;打开命令面板，输入&amp;quot;install&amp;quot;命令，选择“Package Control: Install Package”，然后输入要安装的包的名称，就可以在线安装了。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="sublimecodeintel"&gt;
+&lt;h3&gt;&lt;a class="toc-backref" href="#id5"&gt;SublimeCodeIntel插件&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;智能提示插件，这个插件的智能提示功能非常强大，可以自定义提示的内容库&lt;/p&gt;
+&lt;p&gt;Preferences ——》Package Settings ——》SublimeCodeIntel ——》Settings - Default&lt;/p&gt;
+&lt;p&gt;修改里面python的配置，如下：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="s2"&gt;&amp;quot;codeintel_config&amp;quot;&lt;/span&gt;: &lt;span class="o"&gt;{&lt;/span&gt;
+    &lt;span class="s2"&gt;&amp;quot;Python&amp;quot;&lt;/span&gt;: &lt;span class="o"&gt;{&lt;/span&gt;
+            &lt;span class="s2"&gt;&amp;quot;PATH&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:&lt;/span&gt;&lt;span class="nv"&gt;$PATH&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;,
+            &lt;span class="s2"&gt;&amp;quot;pythonExtraPaths&amp;quot;&lt;/span&gt;: &lt;span class="o"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/usr/local/lib/python2.7/site-packages&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;,
+            &lt;span class="s2"&gt;&amp;quot;python&amp;quot;&lt;/span&gt;:&lt;span class="s2"&gt;&amp;quot;/usr/bin/python2.7&amp;quot;&lt;/span&gt;,
+            &lt;span class="s2"&gt;&amp;quot;PYTHONPATH&amp;quot;&lt;/span&gt;: &lt;span class="s2"&gt;&amp;quot;/usr/local/lib/python2.7/site-packages:/System/Library/Frameworks/Python.framework/Versions/2.7/:/Users/ce/workspace:&lt;/span&gt;&lt;span class="nv"&gt;$PYTHONPATH&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+    &lt;span class="o"&gt;}&lt;/span&gt;,
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;安装pep8和pylint 实现代码风格和错误检查&lt;/p&gt;
+&lt;p&gt;sudo pip install pylint&lt;/p&gt;
+&lt;p&gt;sudo pip install pep8&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="sublimelinter"&gt;
+&lt;h3&gt;&lt;a class="toc-backref" href="#id6"&gt;SublimeLinter&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;这是用来在写代码时做代码检查的。可以在包管理器中安装。写Python程序的话，它还会帮你查代码是否符合PEP8的要求。有问题有代码会出现白框，点击时底下的状态栏会提示出什么问题。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="python-pep8-autoformat"&gt;
+&lt;h3&gt;&lt;a class="toc-backref" href="#id7"&gt;Python PEP8 Autoformat&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;这是用来按PEP8自动格式化代码的。可以在包管理器中安装。如果以前写程序不留意的话，用SublimeLinter一查，满屏都是白框框，只要装上这个包，按ctrl+shift+r，代码就会按PEP8要求自动格式化了，一屏的白框几乎都消失了&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="gitgutter"&gt;
+&lt;h3&gt;&lt;a class="toc-backref" href="#id8"&gt;GitGutter&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;它基于git查看代码行是被增加，修改还是删除，在行数的前面显示如下：&lt;/p&gt;
+&lt;img alt="GitGutter" class="align-center" src="http://opslinux.qiniudn.com/b4d952ccb1_183250-7WIb-865233.png" /&gt;
+&lt;/div&gt;
+&lt;div class="section" id="sidebarenhancements"&gt;
+&lt;h3&gt;&lt;a class="toc-backref" href="#id9"&gt;SideBarEnhancements&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;可以大大加强在侧栏目录树中右键的选项&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="id2"&gt;
+&lt;h2&gt;&lt;a class="toc-backref" href="#id10"&gt;快捷键&lt;/a&gt;&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nb"&gt;command&lt;/span&gt; + p            //快速查找特定文件
+&lt;span class="nb"&gt;command&lt;/span&gt; + &lt;span class="nb"&gt;shift&lt;/span&gt; + f   //多文件搜素
+&lt;span class="nb"&gt;command&lt;/span&gt; + r          //查看文件内块列表（如果是类文件，展示的是函数）
+&lt;span class="nb"&gt;command&lt;/span&gt; + alt + num //多屏查看文件
+&lt;span class="nb"&gt;command&lt;/span&gt; + k + b    //切换左侧目录面板
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Mon, 26 May 2014 09:46:24 +0800</pubDate><guid>tag:,2014-05-26:sublime_python.html</guid><category>sublime</category><category>python</category></item><item><title>python开发实践(一)</title><link>/python_viode_1.html</link><description>&lt;p&gt;今天更新了python开发实践的第一课，人人都爱列表（一），由于事件匆忙，录制水平没达到理想效果，请大家见谅。第一课还是比较简单的。在这里补充一下大家需要巩固的知识。&lt;/p&gt;
+&lt;p&gt;首先大家要先有个类UNIX的开发环境，用windows的用户建议安装虚拟机，然后安装pyenv来管理python版本也能达到virtualenv不污染系统环境的功能，接着我们平时调试的时候会用到交互环境默认的不是特别好用，这里推荐使用ipython，安装好后，来跟我一起愉快的玩耍吧。&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://opslinux.com/python-pyenv.html"&gt;pyenv安装&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://opslinux.com/install_ipython.html"&gt;ipython安装&lt;/a&gt;&lt;/p&gt;
+&lt;video width="800" height="600" controls="controls"&gt;&lt;source src="movie.ogg" type="video/ogg" /&gt;&lt;source src="http://opslinux.qiniudn.com/1.%E4%BA%BA%E4%BA%BA%E9%83%BD%E7%88%B1%E5%88%97%E8%A1%A8(%E4%B8%80)low.mp4" type="video/mp4" /&gt;Your browser does not support the video tag.&lt;/video&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Sun, 25 May 2014 22:17:06 +0800</pubDate><guid>tag:,2014-05-25:python_viode_1.html</guid><category>python</category></item><item><title>python视频动员</title><link>/python_viode_0.html</link><description>&lt;p&gt;python现在变得越来越流行，所以有更多朋友想学习python，有些朋友没有编程基础，买了书看不进去不知道如何下手，报了培训班，讲师良莠不齐，又怕被坑，所以很困惑。许多人来找我交流，所以我就录制一套快速入门的迭代学习方法，让大家快速的学习，把精力用在大家喜爱的项目上。&lt;/p&gt;
+&lt;embed src="http://player.youku.com/player.php/sid/XNzE1MTc2NjUy/v.swf" allowFullScreen="true" quality="high" width="640" height="360" align="middle" allowScriptAccess="always" type="application/x-shockwave-flash"&gt;&lt;/embed&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Thu, 22 May 2014 07:25:36 +0800</pubDate><guid>tag:,2014-05-22:python_viode_0.html</guid><category>python</category></item><item><title>Django启动shell脚本</title><link>/Django_shell.html</link><description>&lt;p&gt;最近服务器在线上做测试，没用supervisord管理，有时候必须需要手动来回切换，dev和test启动的方式也不同，索性用shell写个比较low的脚本搞定事情。&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class="k"&gt;case&lt;/span&gt; &lt;span class="nv"&gt;$1&lt;/span&gt; in
+    dev&lt;span class="o"&gt;)&lt;/span&gt;
+        . ~/py2/bin/activate       &lt;span class="c"&gt;#使用 virtualenv&lt;/span&gt;
+        python manage.py runserver store.dev.service.cmos.net:8080
+        &lt;span class="p"&gt;;;&lt;/span&gt;
+    &lt;span class="nb"&gt;test&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+        . ~/py2/bin/activate
+        python manage.py runserver store.test.service.cmos.net:8080
+        &lt;span class="p"&gt;;;&lt;/span&gt;
+    *&lt;span class="o"&gt;)&lt;/span&gt;
+      &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Usage: &lt;/span&gt;&lt;span class="nv"&gt;$0&lt;/span&gt;&lt;span class="s2"&gt; [dev|test]&amp;quot;&lt;/span&gt;
+      &lt;span class="nb"&gt;exit &lt;/span&gt;1
+      &lt;span class="p"&gt;;;&lt;/span&gt;
+&lt;span class="k"&gt;esac&lt;/span&gt;
+&lt;span class="nb"&gt;exit &lt;/span&gt;0
+&lt;/pre&gt;&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Mon, 19 May 2014 15:11:45 +0800</pubDate><guid>tag:,2014-05-19:Django_shell.html</guid><category>Django</category><category>python</category></item><item><title>安装ipython</title><link>/install_ipython.html</link><description>&lt;img alt="ipython" class="align-center" src="http://opslinux.qiniudn.com/IPython_logo.png" /&gt;
+&lt;p&gt;今天看到有朋友在用ipython，我也好久没用了，索性装一下&lt;/p&gt;
+&lt;p&gt;环境为MacOS Python 2.7.5&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;pip install readline ipython
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;安装完成，输入ipython进入：&lt;/p&gt;
+&lt;img alt="ipython test" src="http://opslinux.qiniudn.com/026DF930-C3C9-4C67-B3E7-9A986AC0D033.png" /&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Sun, 18 May 2014 10:11:24 +0800</pubDate><guid>tag:,2014-05-18:install_ipython.html</guid><category>ipython</category><category>python</category></item><item><title>Git push 中的 Matching和Simple</title><link>/Git-matching-simple.html</link><description>&lt;p&gt;如果你最近更新了 Git，你可能会在执行 git push 时看到如下消息：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;warning: push.default is &lt;span class="nb"&gt;unset&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; its implicit value is changing in
+
+Git 2.0 from &lt;span class="s1"&gt;&amp;#39;matching&amp;#39;&lt;/span&gt; to &lt;span class="s1"&gt;&amp;#39;simple&amp;#39;&lt;/span&gt;. To squelch this message
+
+and maintain the current behavior after the default changes, use:
+
+
+  git config --global push.default matching
+
+
+To squelch this message and adopt the new behavior now, use:
+
+  git config --global push.default simple
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="section" id="matching"&gt;
+&lt;h2&gt;Matching&lt;/h2&gt;
+&lt;p&gt;‘matching’ 参数是 Git 1.x 的默认行为，其意是如果你执行 git push 但没有指定分支，它将 push 所有你本地的分支到远程仓库中对应匹配的分支。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="simple"&gt;
+&lt;h2&gt;Simple&lt;/h2&gt;
+&lt;p&gt;而 Git 2.x 默认的是 simple，意味着执行 git push 没有指定分支时，只有当前分支会被 push 到你使用 git pull 获取的代码。&lt;/p&gt;
+&lt;p&gt;修改默认设置&lt;/p&gt;
+&lt;p&gt;从上述消息提示中的解释，我们可以修改全局配置，使之不会每次 push 的时候都进行提示。对于 matching 输入如下命令即可：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;git config --global push.default matching
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;而对于 simple ，请输入：&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;git config --global push.default simple
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">创e</dc:creator><pubDate>Sat, 17 May 2014 17:31:26 +0800</pubDate><guid>tag:,2014-05-17:Git-matching-simple.html</guid><category>git</category></item></channel></rss>

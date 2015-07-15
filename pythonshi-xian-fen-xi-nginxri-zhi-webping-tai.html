@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8"> 
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="创e" />
+        <meta name="copyright" content="创e" />
+
+        <meta name="description" content="Contents Nginx日志 Nginx日志分析处理 其实项目写完好久了，一直没时间总结，正好最近离职，也不是特别忙把一些自己认为使用的项目分享一下给大家，希望能帮助到大家，即使帮助不到，我还可以偷偷回来看下，以便温习 Nginx日志 按日期切割log mv /var/log/nginx-server.access.log /var/log/nginx/nginx-server.access_$(date -d "yesterday" +"%Y%m% d").log kill -USR1 `cat /etc/nginx/logs/nginx.pid` 首先要明确自己的Nginx的日志格式，找到配置文件如下： log_format main '$remote_addr - $remote_user [$time_local] "$request" ' '$status ...
+" />
+
+<meta name="keywords" content="python, nginx日志分析, python, " />
+
+<meta property="og:title" content="python实现分析Nginx日志web平台 "/>
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/pythonshi-xian-fen-xi-nginxri-zhi-webping-tai.html" />
+<meta property="og:description" content="Contents Nginx日志 Nginx日志分析处理 其实项目写完好久了，一直没时间总结，正好最近离职，也不是特别忙把一些自己认为使用的项目分享一下给大家，希望能帮助到大家，即使帮助不到，我还可以偷偷回来看下，以便温习 Nginx日志 按日期切割log mv /var/log/nginx-server.access.log /var/log/nginx/nginx-server.access_$(date -d "yesterday" +"%Y%m% d").log kill -USR1 `cat /etc/nginx/logs/nginx.pid` 首先要明确自己的Nginx的日志格式，找到配置文件如下： log_format main '$remote_addr - $remote_user [$time_local] "$request" ' '$status ..." />
+<meta property="og:site_name" content="老运维创e" />
+<meta property="og:article:author" content="创e" />
+<meta property="og:article:published_time" content="2014-03-16T22:13:35+08:00" />
+<meta property="" content="2014-05-10T22:50:27+08:00" />
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python实现分析Nginx日志web平台 ">
+<meta name="twitter:description" content="Contents Nginx日志 Nginx日志分析处理 其实项目写完好久了，一直没时间总结，正好最近离职，也不是特别忙把一些自己认为使用的项目分享一下给大家，希望能帮助到大家，即使帮助不到，我还可以偷偷回来看下，以便温习 Nginx日志 按日期切割log mv /var/log/nginx-server.access.log /var/log/nginx/nginx-server.access_$(date -d "yesterday" +"%Y%m% d").log kill -USR1 `cat /etc/nginx/logs/nginx.pid` 首先要明确自己的Nginx的日志格式，找到配置文件如下： log_format main '$remote_addr - $remote_user [$time_local] "$request" ' '$status ...">
+
+        <title>python实现分析Nginx日志web平台  · 老运维创e
+</title>
+        <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/theme/css/pygments.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/tipuesearch/tipuesearch.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/elegant.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="/theme/css/custom.css" media="screen">
+        <link href="http://opslinux.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="老运维创e - Full Atom Feed" />
+        <link href="http://opslinux.com/rss.xml" type="application/rss+xml" rel="alternate" title="老运维创e - RSS Feed" />
+        <script src="http://code.jquery.com/jquery.min.js"></script>
+    </head>
+    <body class="tex2jax_ignore">
+        <div id="content-sans-footer">
+        <div class="navbar navbar-static-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a>
+                    <a class="brand" href="/"><span class=site-name>老运维创e</span></a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav pull-right top-menu">
+                            <li ><a href="">Home</a></li>
+                            <li ><a href="/pages/about.html">about</a></li>
+                            <li ><a href="/pages/links.html">links</a></li>
+                            <li ><a href="/categories.html">Categories</a></li>
+                            <li ><a href="/tags.html">Tags</a></li>
+                            <li ><a href="/archives.html">Archives</a></li>
+                            <li><form class="navbar-search" action="/search.html" onsubmit="return validateForm(this.elements['q'].value);"> <input type="text" class="search-query" placeholder="Search" name="q" id="tipue_search_input"></form></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span1"></div>
+                <div class="span10">
+<article>
+<div class="row-fluid">
+    <header class="page-header span10 offset2">
+    <h1><a href="/pythonshi-xian-fen-xi-nginxri-zhi-webping-tai.html"> python实现分析Nginx日志web平台  </a></h1>
+    </header>
+</div>
+
+<div class="row-fluid">
+        <div class="span8 offset2 article-content">
+
+            
+            <div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#nginx" id="id2">Nginx日志</a></li>
+<li><a class="reference internal" href="#id1" id="id3">Nginx日志分析处理</a></li>
+</ul>
+</div>
+<p>其实项目写完好久了，一直没时间总结，正好最近离职，也不是特别忙把一些自己认为使用的项目分享一下给大家，希望能帮助到大家，即使帮助不到，我还可以偷偷回来看下，以便温习</p>
+<div class="section" id="nginx">
+<h2><a class="toc-backref" href="#id2">Nginx日志</a></h2>
+<p>按日期切割log</p>
+<div class="highlight"><pre><span class="n">mv</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">nginx</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="n">access</span><span class="o">.</span><span class="n">log</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">log</span><span class="o">/</span><span class="n">nginx</span><span class="o">/</span><span class="n">nginx</span><span class="o">-</span><span class="n">server</span><span class="o">.</span><span class="n">access_</span><span class="err">$</span><span class="p">(</span><span class="n">date</span> <span class="o">-</span><span class="n">d</span> <span class="s">&quot;yesterday&quot;</span> <span class="o">+</span><span class="s">&quot;%Y%m%</span>
+<span class="n">d</span><span class="s">&quot;).log</span>
+<span class="n">kill</span> <span class="o">-</span><span class="n">USR1</span> <span class="sb">`cat /etc/nginx/logs/nginx.pid`</span>
+</pre></div>
+<p>首先要明确自己的Nginx的日志格式，找到配置文件如下：</p>
+<div class="highlight"><pre><span class="n">log_format</span>  <span class="n">main</span>  <span class="s">&#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;</span>
+                  <span class="s">&#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;</span>
+                  <span class="s">&#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot; &quot;$request_time&quot; &quot;$upstream_response_time&quot;&#39;</span><span class="p">;</span>
+</pre></div>
+<p>以上是我Nginx日志的格式</p>
+</div>
+<div class="section" id="id1">
+<h2><a class="toc-backref" href="#id3">Nginx日志分析处理</a></h2>
+<p>啥也别说了 直接上代码：</p>
+<div class="highlight"><pre><span class="c">#coding=utf-8</span>
+<span class="kn">import</span> <span class="nn">linecache</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">time</span><span class="o">,</span><span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">conn</span>
+<span class="n">w</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;112.224.65.85 - - [20/Aug/2013:00:01:02 +0800] &quot;POST /api/topic/comments HTTP/1.1&quot; 200 3804 &quot;-&quot; &quot;Corax/0.7.0 CFNetwork/609.1.4 Darwin/13.0.0&quot; &quot;-&quot; &quot;1.173&quot; &quot;0.005&quot;&#39;&#39;&#39;</span>
+<span class="n">files_dir</span> <span class="o">=</span> <span class="s">&quot;/home/corax/ops/data/&quot;</span>
+<span class="n">bak_dir</span> <span class="o">=</span> <span class="s">&quot;/home/corax/ops/data/backup&quot;</span>
+
+<span class="k">def</span> <span class="nf">readfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;*.log&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">files</span>
+
+<span class="k">def</span> <span class="nf">readtime</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">read_time</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;*.log&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">files</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="n">read_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">read_time</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">read_time</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">read_time</span>
+
+<span class="k">def</span> <span class="nf">timestamp</span><span class="p">(</span><span class="n">time_file</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">time_file</span><span class="p">,</span><span class="s">&#39;%Y%b</span><span class="si">%d</span><span class="s"> %H:%M:%S&#39;</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">datestamp</span><span class="p">(</span><span class="n">date_name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date_name</span><span class="p">,</span><span class="s">&#39;%Y%b</span><span class="si">%d</span><span class="s">&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">handle_log</span><span class="p">(</span><span class="n">log_file</span><span class="p">):</span>
+    <span class="n">ip</span> <span class="o">=</span> <span class="s">r&quot;?P&lt;ip&gt;[\d.]*&quot;</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="s">r&quot;?P&lt;date&gt;\d+&quot;</span>
+    <span class="n">month</span> <span class="o">=</span> <span class="s">r&quot;?P&lt;month&gt;\w+&quot;</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="s">r&quot;?P&lt;year&gt;\d+&quot;</span>
+    <span class="n">log_time</span> <span class="o">=</span> <span class="s">r&quot;?P&lt;time&gt;\S+&quot;</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="s">r&quot;?P&lt;method&gt;\S+&quot;</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="s">r&quot;?P&lt;request&gt;\S+&quot;</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="s">r&quot;?P&lt;status&gt;\d+&quot;</span>
+    <span class="n">bodyBytesSent</span> <span class="o">=</span> <span class="s">r&quot;?P&lt;bodyBytesSent&gt;\d+&quot;</span>
+    <span class="n">refer</span> <span class="o">=</span> <span class="s">r&quot;&quot;&quot;?P&lt;refer&gt;</span>
+<span class="s">             [^\&quot;]*</span>
+<span class="s">             &quot;&quot;&quot;</span>
+    <span class="n">userAgent</span><span class="o">=</span><span class="s">r&quot;&quot;&quot;?P&lt;userAgent&gt;</span>
+<span class="s">                \S*</span>
+<span class="s">               &quot;&quot;&quot;</span>
+    <span class="n">forwardr</span><span class="o">=</span><span class="s">r&quot;&quot;&quot;?P&lt;forwardr&gt;</span>
+<span class="s">                [^\&quot;]*</span>
+<span class="s">               &quot;&quot;&quot;</span>
+    <span class="n">request_time</span><span class="o">=</span><span class="s">r&quot;&quot;&quot;?P&lt;request_time&gt;</span>
+<span class="s">                [^\&quot;]*</span>
+<span class="s">               &quot;&quot;&quot;</span>
+    <span class="n">response_time</span><span class="o">=</span><span class="s">r&quot;&quot;&quot;?P&lt;response_time&gt;</span>
+<span class="s">                [^\&quot;]*</span>
+<span class="s">               &quot;&quot;&quot;</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&quot;(</span><span class="si">%s</span><span class="s">)\ -\ -\ \[(</span><span class="si">%s</span><span class="s">)/(</span><span class="si">%s</span><span class="s">)/(</span><span class="si">%s</span><span class="s">)\:(</span><span class="si">%s</span><span class="s">)\ [\S]+\]\ </span><span class="se">\&quot;</span><span class="s">(</span><span class="si">%s</span><span class="s">)?[\s]?(</span><span class="si">%s</span><span class="s">)?.*?</span><span class="se">\&quot;</span><span class="s">\ (</span><span class="si">%s</span><span class="s">)\ (</span><span class="si">%s</span><span class="s">)\ </span><span class="se">\&quot;</span><span class="s">(</span><span class="si">%s</span><span class="s">)</span><span class="se">\&quot;</span><span class="s">\ </span><span class="se">\&quot;</span><span class="s">(</span><span class="si">%s</span><span class="s">).*?</span><span class="se">\&quot;</span><span class="s">\ </span><span class="se">\&quot;</span><span class="s">(</span><span class="si">%s</span><span class="s">)</span><span class="se">\&quot;</span><span class="s">\ </span><span class="se">\&quot;</span><span class="s">(</span><span class="si">%s</span><span class="s">)</span><span class="se">\&quot;</span><span class="s">\ </span><span class="se">\&quot;</span><span class="s">(</span><span class="si">%s</span><span class="s">)</span><span class="se">\&quot;</span><span class="s">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">ip</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">log_time</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">bodyBytesSent</span><span class="p">,</span> <span class="n">refer</span><span class="p">,</span> <span class="n">userAgent</span><span class="p">,</span> <span class="n">forwardr</span><span class="p">,</span> <span class="n">request_time</span><span class="p">,</span> <span class="n">response_time</span> <span class="p">),</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">)</span>
+
+    <span class="n">s</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="n">log_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">log_file</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">file_all</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">file_all</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">m</span><span class="p">:</span>
+            <span class="n">time_all</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s%s%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+            <span class="n">time_format</span> <span class="o">=</span> <span class="n">timestamp</span><span class="p">(</span><span class="n">time_all</span><span class="p">)</span>
+            <span class="n">date</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;%Y%m</span><span class="si">%d</span><span class="s">&quot;</span><span class="p">,</span><span class="n">datestamp</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s%s%s</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span>
+            <span class="n">hour</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;:&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c"># print date,hour</span>
+            <span class="k">if</span> <span class="n">g</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&quot;-&quot;</span><span class="p">:</span>
+                <span class="n">req_time</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="mi">12</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">req_time</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="k">if</span> <span class="n">g</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&quot;-&quot;</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="mi">13</span><span class="p">])</span><span class="o">&lt;=</span><span class="mi">5</span><span class="p">:</span>
+                <span class="n">res_time</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="mi">13</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">res_time</span> <span class="o">=</span>  <span class="bp">None</span>
+            <span class="n">log</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;ip&#39;</span><span class="p">:</span><span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="s">&#39;time&#39;</span><span class="p">:</span><span class="n">time_format</span><span class="p">,</span><span class="s">&#39;method&#39;</span><span class="p">:</span><span class="n">g</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span><span class="s">&#39;request&#39;</span><span class="p">:</span><span class="n">g</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span><span class="s">&#39;status&#39;</span><span class="p">:</span><span class="n">g</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span><span class="s">&#39;bodyBytesSent&#39;</span><span class="p">:</span><span class="n">g</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span><span class="s">&#39;refer&#39;</span><span class="p">:</span><span class="n">g</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span><span class="s">&#39;userAgent&#39;</span><span class="p">:</span><span class="n">g</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span><span class="s">&#39;forwardr&#39;</span><span class="p">:</span><span class="n">g</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span><span class="s">&#39;request_time&#39;</span><span class="p">:</span><span class="n">req_time</span><span class="p">,</span><span class="s">&#39;response_time&#39;</span><span class="p">:</span><span class="n">res_time</span><span class="p">,</span><span class="s">&#39;date&#39;</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">date</span><span class="p">),</span><span class="s">&#39;hour&#39;</span><span class="p">:</span><span class="nb">int</span><span class="p">(</span><span class="n">hour</span><span class="p">)}</span>
+
+            <span class="n">conn</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">log</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&quot;mv </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> &quot;</span><span class="o">%</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">bak_dir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s">&quot;mv </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> &quot;</span><span class="o">%</span><span class="p">(</span><span class="n">l</span><span class="p">,</span><span class="n">bak_dir</span><span class="p">))</span>
+    <span class="k">print</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">s</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">lf</span> <span class="o">=</span> <span class="n">readfile</span><span class="p">(</span><span class="n">files_dir</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">lf</span>
+    <span class="n">read_time</span> <span class="o">=</span> <span class="n">readtime</span><span class="p">(</span><span class="n">files_dir</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">read_time</span>
+    <span class="n">handle_log</span><span class="p">(</span><span class="n">lf</span><span class="p">)</span>
+</pre></div>
+<p>我们书接上回，对上面的代码进行一下梳理：</p>
+<p>w变量存了一个测试的Nginx日志条目,readfile()函数是读取日志文件，然后返回文件的路径，readtime()函数是获取日期，handle_log()函数是分析日志的函数，对于每个日志段，用正则精心匹配筛选出来，然后就是入库。这里面试写入到了MongDB中。</p>
+<p>好了，日志都放到NOSQL当中了，接下来就是分析的问题，这个就是仁者见仁智者见智的事了，每个公司的需求不一样，有用redis分析的，有用zeromq分析，这就看大家的喜好了，分析完最后还是推荐大家用highcharts出图比较好看，这里推荐使用highcharts的文章：</p>
+<p><a class="reference external" href="http://opslinux.com/python_and_highcharts-.html">highcharts使用</a></p>
+</div>
+
+            
+            
+            <hr/>
+        </div>
+        <section>
+        <div class="span2" style="float:right;font-size:0.9em;">
+            <h4>Published</h4>
+            <time pubdate="pubdate" datetime="2014-03-16T22:13:35+08:00">Mar 16, 2014</time>
+
+<h4>Last Updated</h4>
+<time datetime="2014-05-10T22:50:27+08:00">May 10, 2014</time>
+
+            <h4>Category</h4>
+            <a class="category-link" href="/categories.html#python-ref">python</a>
+            <h4>Tags</h4>
+            <ul class="list-of-tags tags-in-article">
+                <li><a href="/tags.html#nginxri-zhi-fen-xi-ref">nginx日志分析
+                    <span>1</span>
+</a></li>
+                <li><a href="/tags.html#python-ref">python
+                    <span>22</span>
+</a></li>
+            </ul>
+<h4>Contact</h4>
+    <a href="http://github.com/zbing3" title="My GitHub主页 Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-github主页 sidebar-social-links"></i></a>
+    <a href="mailto:zbing3@163.com" title="My 电子邮件 Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-电子邮件 sidebar-social-links"></i></a>
+    <a href="http://weibo.com/zb311" title="My 新浪微博 Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-新浪微博 sidebar-social-links"></i></a>
+    <a href="http://opslinux.com/feed/all.atom.xml" title="My RSS订阅 Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-rss订阅 sidebar-social-links"></i></a>
+    <a href="http://opslinux.com/" title="My 捐赠本博 Profile" class="sidebar-social-links" target="_blank">
+    <i class="fa fa-捐赠本博 sidebar-social-links"></i></a>
+        </div>
+        </section>
+</div>
+</div>
+</article>
+                </div>
+                <div class="span1"></div>
+            </div>
+        </div>
+        <div id="push"></div>
+    </div>
+<footer>
+<div id="footer">
+    <ul class="footer-content">
+        <li class="elegant-subtitle"><span class="site-name">老运维创e</span> - 分享技术</li>
+        <li class="elegant-license">Copyright &copy; 2013-2014 <a href="http://opslinux.com"><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"> 老运维创e</span></a>. All Rights Reserved. <a href="http://opslinux.com/rss.xml">网站地图</a> <a href="http://www.51.la/?16996417" target="_blank"><img alt="&#x6211;&#x8981;&#x5566;&#x514D;&#x8D39;&#x7EDF;&#x8BA1;" src="http://img.users.51.la/16996417.asp" style="border:none" /></a></li>
+        <li class="elegant-power">Powered by <a href="http://getpelican.com/" title="Pelican Home Page">Pelican</a>. Theme: <a href="http://oncrashreboot.com/pelican-elegant" title="Theme Elegant Home Page">Elegant</a> by <a href="http://oncrashreboot.com" title="Talha Mansoor Home Page">Talha Mansoor</a></li>
+    </ul>
+</div>
+</footer>            <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script>
+            function validateForm(query)
+            {
+                return (query.length > 0);
+            }
+        </script>
+
+    
+    </body>
+</html>
